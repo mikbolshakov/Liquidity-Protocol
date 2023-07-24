@@ -1,0 +1,20 @@
+node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+#Hardhat files
+cache
+artifacts
+
+# OS X
+.DS_Store
+
+/scripts/deploy/addresses
+/scripts/deploy/bridge_config
+/scripts/deploy/faucet_config
+/scripts/deploy/synth_chef_config
+/scripts/deploy/wrapper_config
+hardhat.config.ts

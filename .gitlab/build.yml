@@ -1,0 +1,47 @@
+cache:
+    key: rpc-cache
+    paths:
+        - .cache/
+    when: "always"
+
+variables:
+    DO_MERGE: "false"
+
+build:
+    needs:
+        - job: merge_target_branch
+          optional: true
+    script:
+        - $DO_MERGE && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME && git fetch && git merge --no-ff --no-commit origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+        - docker tag ent-smart-contracts-v2:latest ent-smart-contracts-v2:old || true
+        - npm run docker:build
+    tags:
+        - linux
+
+lint:
+    needs: [build]
+    script:
+        - docker run --rm ent-smart-contracts-v2:latest sh -c "yarn lint"
+    tags:
+        - linux
+
+test:
+    needs: [build]
+    script:
+        - docker run --rm -v $PWD/.cache/:/app/cache/hardhat-network-fork --env-file <(env | grep ENT) ent-smart-contracts-v2:latest sh -c "yarn test"
+    tags:
+        - linux
+
+slither:
+    needs: [build]
+    script:
+        - docker run --rm -v $PWD/.cache/:/app/cache/hardhat-network-fork --env-file <(env | grep -E "$ENV_WHITELIST") ent-smart-contracts-v2:latest sh -c "yarn slither | ./.gitlab/slither-report.py"
+    tags:
+        - linux
+
+clean_up_image:
+    needs: [build]
+    script:
+        - docker rmi ent-smart-contracts-v2:old -f
+    tags:
+        - linux

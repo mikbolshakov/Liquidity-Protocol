@@ -1,0 +1,17 @@
+merge_target_branch:
+    script:
+        - git checkout -b $CI_JOB_ID-build
+        - echo "HELLO=true" >> build.env
+        - git fetch
+        - git merge --no-ff --no-commit origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+        - if [ "0" -eq "$?" ]; then
+          echo "DO_MERGE=true" >> build.env;
+          fi
+        - git reset --hard HEAD
+    rules:
+        - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+    tags:
+        - linux
+    artifacts:
+        reports:
+            dotenv: build.env
