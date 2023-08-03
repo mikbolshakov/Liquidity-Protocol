@@ -1,6 +1,6 @@
 import hre from "hardhat";
 import { ethers } from "hardhat";
-import { EntangleTestBridge__factory } from "../../typechain-types/factories/contracts/bridge/EntangleTestBridge__factory";
+import { TestBridge__factory } from "../../typechain-types/factories/contracts/bridge/TestBridge__factory";
 import path from "path";
 import fs from "fs";
 
@@ -10,7 +10,7 @@ export default async function deployTestBridge() {
     console.log("Deploy Bridge");
     const network = hre.network.name.replace("hardhat", "teth");
 
-    const BridgeFactory = (await ethers.getContractFactory("EntangleTestBridge")) as EntangleTestBridge__factory;
+    const BridgeFactory = (await ethers.getContractFactory("TestBridge")) as TestBridge__factory;
 
     let bridge = await BridgeFactory.deploy();
     await bridge.deployed();

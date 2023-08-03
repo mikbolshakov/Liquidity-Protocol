@@ -4,7 +4,7 @@ import { ethers } from "hardhat";
 import _ from "lodash";
 import path from "path";
 import Config from "../../hardhat.config";
-import { EntangleSynth } from "../../typechain-types";
+import { Synth } from "../../typechain-types";
 import { synthInfo } from "../synth";
 import { promisify } from "util";
 const sleep = promisify(setTimeout);
@@ -82,13 +82,13 @@ class SynthGroup {
     }
 
     public synths: SynthMeta[] = [];
-    public addSynth(synth: EntangleSynth, s: string, d: number) {
+    public addSynth(synth: Synth, s: string, d: number) {
         this.synths.push(new SynthMeta(synth, s, d, this));
     }
 }
 class SynthMeta {
     constructor(
-        public synth: EntangleSynth,
+        public synth: Synth,
         public srcChain: string,
         public opDecimals = NaN,
         public synthGroup: SynthGroup
@@ -145,7 +145,7 @@ async function main() {
             const mnemo = ethers.Wallet.fromMnemonic(v.accounts.mnemonic, `m/44'/60'/0'/0/1`);
             const wallet = new ethers.Wallet(mnemo.privateKey, provider);
 
-            const factory = await ethers.getContractAt("EntangleSynthFactory", config.factory, wallet);
+            const factory = await ethers.getContractAt("SynthFactory", config.factory, wallet);
             console.log("---- ", config.chainId, factory.address);
 
             const opToken = await ethers.getContractAt("ERC20", config.stable, wallet);
@@ -177,7 +177,7 @@ async function main() {
                 // of this synth across all chains.
                 // Also save the synth itself for future reference
                 const synthAddress = await factory.deprecated_synths(info.chainId, info.chef, info.pid);
-                const synth = await ethers.getContractAt("EntangleSynth", synthAddress, wallet);
+                const synth = await ethers.getContractAt("Synth", synthAddress, wallet);
                 const totalSupply = await synth.totalSupply();
                 synthMeta[synthId].addSupply(totalSupply);
                 synthMeta[synthId].addSynth(synth, network, decimals);

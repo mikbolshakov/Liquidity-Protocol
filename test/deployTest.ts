@@ -25,7 +25,7 @@
 //         const [owner] = await ethers.getSigners();
 //         const address = await owner.getAddress();
 
-//         const fact = await ethers.getContractAt("EntangleSynthFactory", factory);
+//         const fact = await ethers.getContractAt("SynthFactory", factory);
 
 //         const isAdmin = await fact.hasRole(fact.ADMIN_ROLE(), address);
 //         expect(isAdmin).to.be.true;

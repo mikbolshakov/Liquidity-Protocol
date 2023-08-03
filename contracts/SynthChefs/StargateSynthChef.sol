@@ -18,7 +18,7 @@ contract StargateSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgra
     /// @notice Interface of TraderJoe Router
     IStargateRouter public stargateRouter;
 
-    /// @notice Entangle MasterChef address
+    /// @notice MasterChef address
     address public masterChefEnt;
 
     bytes32 public constant ADMIN = keccak256("ADMIN");
@@ -33,7 +33,7 @@ contract StargateSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgra
         uint256 stargateRouterPoolID;
     }
 
-    /// @notice Mapping from entangle internal pool Id to TraderJoe pool Id
+    /// @notice Mapping from internal pool Id to TraderJoe pool Id
     mapping(uint32 => Pool) public pools;
 
     /// @notice 0 - Stargate Router, 1 - EntMasterChef, 2 - ADMIN, 3 - MASTER.
@@ -47,14 +47,14 @@ contract StargateSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgra
     function _authorizeUpgrade(address) internal override onlyOwner {}
 
     /// @notice Add a new pool. Can only be called by the ADMIN.
-    /// @param poolId Entangle internal poolId
+    /// @param poolId internal poolId
     /// @param poolInfo Information required to communicate with Stargate.
     function addPool(uint32 poolId, bytes calldata poolInfo) external onlyRole(ADMIN) {
         pools[poolId] = abi.decode(poolInfo, (Pool));
     }
 
     /// @notice Provide liquidity to pool and stake LP tokens. Can only be called by the MASTER.
-    /// @param poolId Entangle internal poolId
+    /// @param poolId internal poolId
     /// @param amounts Amounts of each token in pair. amounts[0] for token0, amounts[1] for token1.
     function deposit(uint32 poolId, uint256[] memory amounts) external onlyRole(MASTER) {
         Pool memory pool = pools[poolId];
@@ -71,8 +71,8 @@ contract StargateSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgra
         pool.stargate.deposit(pool.stargateLPStakingPoolID, amountLPs);
     }
 
-    /// @notice Withdraw LP tokens from farm and remove liquidity. Transfer all to entangle MasterChef. Can only be called by the MASTER.
-    /// @param poolId Entangle internal poolId
+    /// @notice Withdraw LP tokens from farm and remove liquidity. Transfer all to MasterChef. Can only be called by the MASTER.
+    /// @param poolId internal poolId
     /// @param lpAmountToWithdraw Amount of LP tokens to witdraw
     function withdraw(
         uint32 poolId,
@@ -95,7 +95,7 @@ contract StargateSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgra
     }
 
     /// @notice Deposit LP tokens to farm. Can only be called by the MASTER.
-    /// @param poolId Entangle internal poolId
+    /// @param poolId internal poolId
     /// @param lpAmount Amount of LP tokens to deposit
     function depositLP(uint32 poolId, uint256 lpAmount) external onlyRole(MASTER) {
         Pool memory pool = pools[poolId];
@@ -105,8 +105,8 @@ contract StargateSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgra
         pool.stargate.deposit(pool.stargateLPStakingPoolID, lpAmount);
     }
 
-    /// @notice Withdraw LP tokens from farm and transfer it to entangle MasterChef. Can only be called by the MASTER.
-    /// @param poolId Entangle internal poolId
+    /// @notice Withdraw LP tokens from farm and transfer it to MasterChef. Can only be called by the MASTER.
+    /// @param poolId internal poolId
     /// @param lpAmount Amount of LP tokens to withdraw
     function withdrawLP(uint32 poolId, uint256 lpAmount) external onlyRole(MASTER) {
         Pool memory pool = pools[poolId];
@@ -114,8 +114,8 @@ contract StargateSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgra
         pool.LPToken.safeTransfer(masterChefEnt, lpAmount);
     }
 
-    /// @notice Grab bounty from farm and transfer it to entangle MasterChef. Can only be called by the MASTER.
-    /// @param poolId Entangle internal poolId
+    /// @notice Grab bounty from farm and transfer it to MasterChef. Can only be called by the MASTER.
+    /// @param poolId internal poolId
     function harvest(
         uint32 poolId
     ) external onlyRole(MASTER) returns (address[] memory rewardTokens, uint256[] memory amounts) {
@@ -132,7 +132,7 @@ contract StargateSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgra
     }
 
     /// @notice View function to get balance of LP tokens.
-    /// @param poolId Entangle internal poolId
+    /// @param poolId internal poolId
     /// @return amount Balance of LP tokens of this contract
     function getTotalLpBalance(uint32 poolId) public view returns (uint256 amount) {
         Pool memory pool = pools[poolId];
@@ -140,7 +140,7 @@ contract StargateSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgra
     }
 
     /// @notice View function to get pool tokens addresses.
-    /// @param poolId Entangle internal poolId
+    /// @param poolId internal poolId
     /// @return tokens array of pool token addresses.
     function getPoolTokens(uint32 poolId) external view returns (address[] memory tokens) {
         Pool memory pool = pools[poolId];
@@ -149,7 +149,7 @@ contract StargateSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgra
     }
 
     /// @notice View function to calculate amounts of pool tokens if we swap it.
-    /// @param poolId Entangle internal poolId
+    /// @param poolId internal poolId
     /// @param lpAmount amount of LP
     /// @return amounts array of pool tokens amounts
     function lpTokensToPoolTokens(uint32 poolId, uint256 lpAmount) external view returns (uint256[] memory amounts) {
@@ -161,7 +161,7 @@ contract StargateSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgra
     }
 
     /// @notice View function to get address of lp tokens of specific pool.
-    /// @param poolId Entangle internal poolId
+    /// @param poolId internal poolId
     function lpTokenAddress(uint32 poolId) external view returns (address lpToken) {
         Pool memory pool = pools[poolId];
         lpToken = address(pool.LPToken);

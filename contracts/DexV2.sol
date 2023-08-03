@@ -5,10 +5,10 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "./lib/SidLibrary.sol";
-import "./EntangleSynth.sol";
+import "./Synth.sol";
 import "./SynthFactory.sol";
 
-contract EntangleDexV2 is Initializable, AccessControlUpgradeable {
+contract DexV2 is Initializable, AccessControlUpgradeable {
     using SafeERC20 for IERC20;
 
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
@@ -79,7 +79,7 @@ contract EntangleDexV2 is Initializable, AccessControlUpgradeable {
         opAmount = opAmount - fee;
         opToken.safeTransfer(feeCollector, fee);
 
-        EntangleSynth synth = synthFactory.getSynth(sid);
+        Synth synth = synthFactory.getSynth(sid);
         // 4. Через функцию convertOpToSynth контракта SynthFactory узнаёт количество synthAmount.
         uint256 synthAmount = synthFactory.convertOpToSynth(sid, opAmount);
 
@@ -129,7 +129,7 @@ contract EntangleDexV2 is Initializable, AccessControlUpgradeable {
     }
 
     function sell(uint128 sid, uint256 synthAmount) public {
-        EntangleSynth synth = synthFactory.getSynth(sid);
+        Synth synth = synthFactory.getSynth(sid);
         uint256 opAmount = synthFactory.convertSynthToOp(sid, synthAmount);
 
         // 3. Взимает комиссию с opToken на адрес feeCollector.

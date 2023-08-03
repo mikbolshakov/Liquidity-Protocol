@@ -1,5 +1,5 @@
 {
-    "name": "entangle-smart-contracts",
+    "name": "smart-contracts",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -13,7 +13,7 @@
         "docker:tag": "docker tag ent-smart-contracts-v2:latest 899260217834.dkr.ecr.us-east-1.amazonaws.com/ent-smart-contracts-v2:latest",
         "docker:push": "docker push 899260217834.dkr.ecr.us-east-1.amazonaws.com/ent-smart-contracts-v2:latest",
         "docker:upload": "npm run docker:build && npm run docker:tag && npm run docker:push",
-        "slither": "slither . --checklist --filter-paths \"node_modules|thirdparty|interfaces|EntangleTestBridge\""
+        "slither": "slither . --checklist --filter-paths \"node_modules|thirdparty|interfaces|TestBridge\""
     },
     "author": "",
     "license": "ISC",

@@ -1,12 +1,12 @@
 import { ethers, upgrades } from "hardhat";
 import { expect } from "chai";
-import { EntangleSynth, SynthFactory } from "../typechain-types";
+import { Synth, SynthFactory } from "../typechain-types";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 describe("SynthFactory", () => {
     let SF: SynthFactory;
     let owner: SignerWithAddress;
-    let synth: EntangleSynth;
+    let synth: Synth;
     before(async () => {
         const ImplFactory = await ethers.getContractFactory("SynthFactory");
         [owner] = await ethers.getSigners();
@@ -20,7 +20,7 @@ describe("SynthFactory", () => {
         const synthInfo = await SF.synths(0);
         expect(synthInfo.synth).to.be.not.eq(ethers.constants.AddressZero);
 
-        synth = await ethers.getContractAt("EntangleSynth", synthInfo.synth);
+        synth = await ethers.getContractAt("Synth", synthInfo.synth);
         expect(await synth.symbol()).to.be.eq("sTST");
     });
 

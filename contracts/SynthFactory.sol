@@ -5,7 +5,7 @@ import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol"
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "./EntangleSynth.sol";
+import "./Synth.sol";
 
 contract SynthFactory is Initializable, AccessControlUpgradeable, UUPSUpgradeable, OwnableUpgradeable {
     function initialize() public initializer {
@@ -29,7 +29,7 @@ contract SynthFactory is Initializable, AccessControlUpgradeable, UUPSUpgradeabl
     bytes32 public constant SPOTTER = keccak256("SPOTTER");
 
     struct SynthInfo {
-        EntangleSynth synth;
+        Synth synth;
         uint256 price;
         uint256 totalSupplyAllChains;
         bool isActive;
@@ -53,7 +53,7 @@ contract SynthFactory is Initializable, AccessControlUpgradeable, UUPSUpgradeabl
     function deploySynth(uint128 sid, string calldata name) public onlyRole(ADMIN) returns (address) {
         require(!synths[sid].isActive, "Synth already delpoyed");
 
-        EntangleSynth synth = new EntangleSynth(sid, name);
+        Synth synth = new Synth(sid, name);
         synths[sid].isActive = true;
         synths[sid].synth = synth;
 
@@ -90,7 +90,7 @@ contract SynthFactory is Initializable, AccessControlUpgradeable, UUPSUpgradeabl
         return ((synthAmount * price) / (10 ** synthDecimals)) / (10 ** (synthDecimals - opTokenDecimals));
     }
 
-    function getSynth(uint128 sid) public view validSynth(sid) returns (EntangleSynth) {
+    function getSynth(uint128 sid) public view validSynth(sid) returns (Synth) {
         return synths[sid].synth;
     }
 }

@@ -11,12 +11,12 @@ export default async function deployContracts(BRIDGE_ADDR: string, isTestnet: bo
     let [owner] = await ethers.getSigners();
 
     const PauserFactory = await ethers.getContractFactory("Pauser");
-    const IDEXFactory = await ethers.getContractFactory("EntangleDEX");
-    const PoolFactory = await ethers.getContractFactory("EntanglePool");
-    const RouterFactory = await ethers.getContractFactory("EntangleRouter");
-    const LendingFactory = await ethers.getContractFactory("EntangleLending");
-    const DEXonDemandFactory = await ethers.getContractFactory("EntangleDEXOnDemand");
-    const SynthFactoryFactory = await ethers.getContractFactory("EntangleSynthFactory");
+    const IDEXFactory = await ethers.getContractFactory("DEX");
+    const PoolFactory = await ethers.getContractFactory("Pool");
+    const RouterFactory = await ethers.getContractFactory("Router");
+    const LendingFactory = await ethers.getContractFactory("Lending");
+    const DEXonDemandFactory = await ethers.getContractFactory("DEXOnDemand");
+    const SynthFactoryFactory = await ethers.getContractFactory("SynthFactory");
 
     /*
        DEPLOY WRAPPER
@@ -54,7 +54,7 @@ export default async function deployContracts(BRIDGE_ADDR: string, isTestnet: bo
     await pool.deployed();
 
     /*
-       DEPLOY ENTANGLE DEX
+       DEPLOY  DEX
     */
     let idex = await IDEXFactory.deploy(FEE_COLLECTOR);
     await idex.deployed();
@@ -94,7 +94,7 @@ export default async function deployContracts(BRIDGE_ADDR: string, isTestnet: bo
     */
 
     if (isTestnet) {
-        let bridge = await ethers.getContractAt("EntangleTestBridge", BRIDGE_ADDR, owner);
+        let bridge = await ethers.getContractAt("TestBridge", BRIDGE_ADDR, owner);
         await bridge.grantRole(bridge.ADMIN_ROLE(), router.address).then((e) => e.wait());
     }
     const ownerAddress = await owner.getAddress();

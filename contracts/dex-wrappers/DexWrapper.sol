@@ -8,7 +8,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "./interfaces/IEntangleProtocolDEXWrapper.sol";
+import "./interfaces/IProtocolDEXWrapper.sol";
 
 contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable, OwnableUpgradeable {
     using SafeERC20Upgradeable for IERC20Upgradeable;
@@ -96,7 +96,7 @@ contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable,
                 }
 
                 IERC20Upgradeable(lastTokenReceived).safeTransfer(protoDexWrapper, lastReceivedAmount);
-                (lastReceivedAmount, lastTokenReceived) = IEntangleDEXWrapper(protoDexWrapper).swap(
+                (lastReceivedAmount, lastTokenReceived) = IDEXWrapper(protoDexWrapper).swap(
                     path,
                     lastReceivedAmount
                 );
@@ -119,7 +119,7 @@ contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable,
 
             IERC20Upgradeable(tokenFrom).safeTransfer(protoDexWrapper, amount);
 
-            (receivedAmount, ) = IEntangleDEXWrapper(protoDexWrapper).swap(swapTokensPath, amount);
+            (receivedAmount, ) = IDEXWrapper(protoDexWrapper).swap(swapTokensPath, amount);
             uint256 tokenToAmountAfterSwap = IERC20Upgradeable(tokenTo).balanceOf(address(this)) -
                 tokenToBalanceBeforeSwap;
             IERC20Upgradeable(tokenTo).safeTransfer(_msgSender(), tokenToAmountAfterSwap);
@@ -152,7 +152,7 @@ contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable,
                 uint256 dexId = specifiedPaths[i].protoDexId;
                 address protoDexWrapper = protoDexWrappers[dexId];
 
-                lastAmountToReceive = IEntangleDEXWrapper(protoDexWrapper).previewSwap(path, lastAmountToReceive);
+                lastAmountToReceive = IDEXWrapper(protoDexWrapper).previewSwap(path, lastAmountToReceive);
             }
             return amountToReceive = lastAmountToReceive;
         } else {
@@ -162,7 +162,7 @@ contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable,
             tokens[1] = tokenTo;
 
             bytes memory swapTokensPath = abi.encode(tokens);
-            amountToReceive = IEntangleDEXWrapper(protoDexWrapper).previewSwap(swapTokensPath, amount);
+            amountToReceive = IDEXWrapper(protoDexWrapper).previewSwap(swapTokensPath, amount);
         }
     }
 

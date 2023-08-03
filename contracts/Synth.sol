@@ -4,11 +4,11 @@ pragma solidity ^0.8.15;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract EntangleSynth is ERC20, AccessControl {
+contract Synth is ERC20, AccessControl {
     uint128 sid;
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
 
-    constructor(uint128 _sid, string memory name) ERC20("EntangleSynth", name) {
+    constructor(uint128 _sid, string memory name) ERC20("Synth", name) {
         sid = _sid;
         _setRoleAdmin(ADMIN_ROLE, ADMIN_ROLE);
         _grantRole(ADMIN_ROLE, msg.sender);
