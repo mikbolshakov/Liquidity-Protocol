@@ -1,9 +1,39 @@
-workflow:
-    rules:
-        - if: '$CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push" && $CI_OPEN_MERGE_REQUESTS'
-          when: never
-        - when: always
+stages:
+    - trigger-rebuild-centralized-script
+    - build_and_push_to_aws
+    - clean_up_image
 
-include:
-    - local: ".gitlab/pr.yml"
-    - local: ".gitlab/build.yml"
+trigger-rebuild-centralized-script:
+    stage: trigger-rebuild-centralized-script
+    tags:
+        - linux
+    script:
+        - >
+            if git diff --quiet HEAD~1 -- scripts/deploy/addresses; then
+               echo "No need to rebuild centralized script"
+            else 
+               echo "There are some changes, triggering rebuild"
+               curl -X POST --fail -F token=$TRIGGER_TOKEN-F ref=testnet https://gitlab.ent-dx.com/api/v4/projects/17/trigger/pipeline
+            fi
+
+build_and_push_to_aws:
+    stage: build_and_push_to_aws
+    script:
+        - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 899260217834.dkr.ecr.us-east-1.amazonaws.com
+        - npm run docker:upload
+    tags:
+        - linux
+    only:
+        refs:
+            - testnet
+
+clean_up_image:
+    stage: clean_up_image
+    script:
+        - docker rmi ent-smart-contracts:latest -f
+        - docker rmi 899260217834.dkr.ecr.us-east-1.amazonaws.com/ent-smart-contracts:latest -f
+    tags:
+        - linux
+    only:
+        refs:
+            - testnet

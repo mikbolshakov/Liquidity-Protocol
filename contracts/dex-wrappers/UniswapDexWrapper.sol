@@ -10,10 +10,10 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "./interfaces/IProtocolDEXWrapper.sol";
+import "./interfaces/IEntangleProtocolDEXWrapper.sol";
 
 contract UniswapDexWrapper is
-    IDEXWrapper,
+    IEntangleDEXWrapper,
     Initializable,
     UUPSUpgradeable,
     AccessControlUpgradeable,
@@ -47,7 +47,11 @@ contract UniswapDexWrapper is
     function swap(
         bytes calldata swapPath,
         uint256 amount
-    ) external onlyRole(MASTER_WRAPPER) returns (uint256 receivedAmount, address lastTokenReceived) {
+    )
+        external
+        onlyRole(MASTER_WRAPPER)
+        returns (uint256 receivedAmount, address lastTokenReceived)
+    {
         address[] memory path = abi.decode(swapPath, (address[]));
         address[] memory routes = _getSwapRoutes(path[0], path[1]);
 
@@ -55,7 +59,13 @@ contract UniswapDexWrapper is
             IERC20Upgradeable(path[0]).safeIncreaseAllowance(address(router), type(uint256).max);
         }
 
-        uint256[] memory amounts = router.swapExactTokensForTokens(amount, 0, routes, _msgSender(), block.timestamp);
+        uint256[] memory amounts = router.swapExactTokensForTokens(
+            amount,
+            0,
+            routes,
+            _msgSender(),
+            block.timestamp
+        );
         receivedAmount = amounts[amounts.length - 1];
         lastTokenReceived = routes[routes.length - 1];
     }
@@ -64,7 +74,10 @@ contract UniswapDexWrapper is
     /// @param swapPath Path to swap tokens.
     /// @param amount Amount of tokens to be swapped.
     /// @return amountToReceive Amount of received tokens if make a swap.
-    function previewSwap(bytes calldata swapPath, uint256 amount) external view returns (uint256 amountToReceive) {
+    function previewSwap(
+        bytes calldata swapPath,
+        uint256 amount
+    ) external view returns (uint256 amountToReceive) {
         address[] memory path = abi.decode(swapPath, (address[]));
         address[] memory routes = _getSwapRoutes(path[0], path[1]);
 
@@ -76,7 +89,10 @@ contract UniswapDexWrapper is
     /// @param _tokenFrom Address of token from which will be swap.
     /// @param _tokenTo Address of token to which will be swap.
     /// @return routes Array of addresses of tokens through which will be swap.
-    function _getSwapRoutes(address _tokenFrom, address _tokenTo) internal view returns (address[] memory routes) {
+    function _getSwapRoutes(
+        address _tokenFrom,
+        address _tokenTo
+    ) internal view returns (address[] memory routes) {
         if (factory.getPair(_tokenFrom, _tokenTo) != address(0)) {
             routes = new address[](2);
             routes[0] = _tokenFrom;

@@ -61,8 +61,13 @@ export async function scaffold(net: string = hre.network.name) {
 
     if (isTestnet(net)) {
         // in case when we redeploy contracts in testnet - we can use deployed bridge and faucet
-        if (fs.existsSync(`./scripts/deploy/addresses/${net}_addresses.json`) && net !== "hardhat") {
-            addresses = JSON.parse(fs.readFileSync(`./scripts/deploy/addresses/${net}_addresses.json`).toString());
+        if (
+            fs.existsSync(`./scripts/deploy/addresses/${net}_addresses.json`) &&
+            net !== "hardhat"
+        ) {
+            addresses = JSON.parse(
+                fs.readFileSync(`./scripts/deploy/addresses/${net}_addresses.json`).toString()
+            );
         } else {
             addresses = {};
         }
@@ -90,7 +95,10 @@ export async function scaffold(net: string = hre.network.name) {
 
     addresses = await deployContracts(BRIDGE_ADDR, isTestnet(net));
     addresses = { ...addresses, faucet: FAUCET_ADDR, checker: TESTNET_CHECKER };
-    fs.writeFileSync(path.join(`./scripts/deploy/addresses/${net}_addresses.json`), JSON.stringify(addresses, null, 2));
+    fs.writeFileSync(
+        path.join(`./scripts/deploy/addresses/${net}_addresses.json`),
+        JSON.stringify(addresses, null, 2)
+    );
 
     return addresses;
 }

@@ -5,7 +5,9 @@ import path from "path";
 import fs from "fs";
 
 export default async function deployTestBridge() {
-    const config = JSON.parse(fs.readFileSync(path.join(__dirname, "bridge_config", "bridge_config.json")).toString());
+    const config = JSON.parse(
+        fs.readFileSync(path.join(__dirname, "bridge_config", "bridge_config.json")).toString()
+    );
 
     console.log("Deploy Bridge");
     const network = hre.network.name.replace("hardhat", "teth");

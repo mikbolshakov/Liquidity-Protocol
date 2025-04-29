@@ -1,0 +1,29 @@
+{
+    "tftm": {
+        "routerAddress": "0xF491e7B69E4244ad4002BC14e878a34207E38c29",
+        "wNative": "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83"
+    },
+    "tavax": {
+        "routerAddress": "0x60aE616a2155Ee3d9A68541Ba4544862310933d4",
+        "wNative": "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7"
+    },
+    "tbsc": {
+        "routerAddress": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
+        "wNative": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+    },
+    "teth": {
+        "routerAddress": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+        "wNative": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    },
+    "tarb": {
+        "routerAddress": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+        "wNative": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
+    },
+    "tmat": {
+        "routerAddress": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+        "wNative": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"
+    },
+    "top": {
+        "routerAddress": "0xa132DAB612dB5cB9fC9Ac426A0Cc215A3423F9c9"
+    }
+}

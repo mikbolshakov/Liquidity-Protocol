@@ -14,4 +14,3 @@ RUN yarn install --ignore-engines
 
 COPY . .
 RUN yarn compile
-# Explicitly specify entrypoint in docker compose

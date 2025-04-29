@@ -40,7 +40,9 @@ export default async function deployWrapper(): Promise<string> {
             const VelodromeWrapperFactory = (await ethers.getContractFactory(
                 "VelodromeWrapper"
             )) as VelodromeWrapper__factory;
-            const velodromWrapper = await VelodromeWrapperFactory.deploy(wrapper_conf[network].routerAddress);
+            const velodromWrapper = await VelodromeWrapperFactory.deploy(
+                wrapper_conf[network].routerAddress
+            );
             await velodromWrapper.deployed();
             wrapperAddress = velodromWrapper.address;
             break;

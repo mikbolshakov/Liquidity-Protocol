@@ -1,0 +1,34 @@
+{
+    "networks": {
+        "tavax": {
+            "chainId": "43114",
+            "pid": "8",
+            "provider": "https://nodes.test.entangle.fi/rpc/avalanche"
+        },
+        "tftm": {
+            "chainId": "250",
+            "pid": "0",
+            "provider": "https://nodes.test.entangle.fi/rpc/avalanche"
+        },
+        "tbsc": {
+            "chainId": "56",
+            "pid": "7",
+            "provider": "https://nodes.test.entangle.fi/rpc/avalanche"
+        },
+        "tarb": {
+            "chainId": "42161",
+            "pid": "0",
+            "provider": "https://nodes.test.entangle.fi/rpc/avalanche"
+        },
+        "top": {
+            "chainId": "10",
+            "pid": "0",
+            "provider": "https://nodes.test.entangle.fi/rpc/avalanche"
+        },
+        "tmat": {
+            "chainId": "137",
+            "pid": "0",
+            "provider": "https://nodes.test.entangle.fi/rpc/avalanche"
+        }
+    }
+}

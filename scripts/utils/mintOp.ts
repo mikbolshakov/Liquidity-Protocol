@@ -27,7 +27,9 @@ async function mintAndTransfer(
         case "teth":
         case "tavax": {
             await contract.updateMasterMinter(owner).then((x) => x.wait());
-            await contract.configureMinter(owner, ethers.constants.MaxUint256).then((x) => x.wait());
+            await contract
+                .configureMinter(owner, ethers.constants.MaxUint256)
+                .then((x) => x.wait());
             // Fall through to `top` case
         }
         case "top": {

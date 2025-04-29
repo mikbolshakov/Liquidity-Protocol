@@ -22,7 +22,10 @@ interface ISwapVelodromeRouter is IQuoteLiquiditySpiritVeloRouter {
         uint deadline
     ) external returns (uint[] memory amounts);
 
-    function getAmountsOut(uint amountIn, route[] memory routes) external view returns (uint[] memory amounts);
+    function getAmountsOut(
+        uint amountIn,
+        route[] memory routes
+    ) external view returns (uint[] memory amounts);
 }
 
 interface IVelodromeFactory {
@@ -30,5 +33,8 @@ interface IVelodromeFactory {
 }
 
 interface IVelodromePair {
-    function getReserves() external view returns (uint _reserve0, uint _reserve1, uint _blockTimestampLast);
+    function getReserves()
+        external
+        view
+        returns (uint _reserve0, uint _reserve1, uint _blockTimestampLast);
 }

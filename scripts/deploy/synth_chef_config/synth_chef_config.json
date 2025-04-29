@@ -1,0 +1,106 @@
+{
+    "tftm": {
+        "stable": "0x04068DA6C83AFCFA0e13ba15A6696662335D5B75",
+        "masterChef": "0x09855B4ef0b9df961ED097EF50172be3e6F13665",
+        "rewardTokens": ["0x5Cc61A78F164885776AA610fb0FE1257df78E59B"],
+        "fee": 1,
+        "pools": [
+            {
+                "pid": 0,
+                "lpToken": "0x364705F8D0744230f39BC176e0270d90dbc72E50",
+                "gaugeAddress": "0x9F0FeB56184f28043f8159af4238cE179D97cBA5",
+                "token0": "0x82f0B8B456c1A451378467398982d4834b6829c1",
+                "token1": "0x04068DA6C83AFCFA0e13ba15A6696662335D5B75",
+                "isStable": true
+            }
+        ]
+    },
+    "tavax": {
+        "stable": "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
+        "masterChef": "0x4483f0b6e2F5486D06958C20f8C39A7aBe87bf8F",
+        "router": "0x60aE616a2155Ee3d9A68541Ba4544862310933d4",
+        "rewardTokens": ["0x6e84a6216eA6dACC71eE8E6b0a5B7322EEbC0fDd"],
+        "fee": 1,
+        "pools": [
+            {
+                "pid": 8
+            }
+        ]
+    },
+    "tbsc": {
+        "stable": "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
+        "masterChef": "0xa5f8C5Dbd5F286960b9d90548680aE5ebFf07652",
+        "router": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
+        "rewardTokens": ["0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82"],
+        "fee": 1,
+        "pools": [
+            {
+                "pid": 7
+            }
+        ]
+    },
+    "teth": {
+        "stable": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        "masterChef": "0xF403C135812408BFbE8713b5A23a04b3D48AAE31",
+        "rewardTokens": ["0xD533a949740bb3306d119CC777fa900bA034cd52"],
+        "fee": 1,
+        "pools": [
+            {
+                "pid": 0,
+                "lpToken": "0x845838df265dcd2c412a1dc9e959c7d08537f8a2",
+                "underlyingToken0": "0x6b175474e89094c44da98b954eedeac495271d0f",
+                "underlyingToken1": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "curveCompoundPool": "0xa2b47e3d5c44877cca798226b7b8118f9bfb7a56",
+                "convexReward": "0xf34DFF761145FF0B05e917811d488B441F33a968"
+            }
+        ]
+    },
+    "top": {
+        "stable": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
+        "router": "0xa132DAB612dB5cB9fC9Ac426A0Cc215A3423F9c9",
+        "rewardTokens": ["0x3c8B650257cFb5f272f799F5e2b4e65093a11a05"],
+        "fee": 1,
+        "pools": [
+            {
+                "pid": 0,
+                "lpToken": "0xd16232ad60188b68076a235c65d692090caba155",
+                "gaugeAddress": "0xb03f52D2DB3e758DD49982Defd6AeEFEa9454e80",
+                "token0": "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
+                "token1": "0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9",
+                "isStable": true
+            }
+        ]
+    },
+    "tarb": {
+        "stable": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
+        "router": "0x53Bf833A5d6c4ddA888F69c22C88C9f356a41614",
+        "rewardTokens": ["0x6694340fc020c5E6B96567843da2df01b2CE1eb6"],
+        "fee": 1,
+        "pools": [
+            {
+                "pid": 0,
+                "lpToken": "0x892785f33CdeE22A30AEF750F285E18c18040c3e",
+                "stargateAddress": "0xeA8DfEE1898a7e0a59f7527F076106d7e44c2176",
+                "token": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
+                "stargateLPStakingPoolID": 0,
+                "stargateRouterPoolID": 1
+            }
+        ]
+    },
+    "tmat": {
+        "stable": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+        "router": "0x45A01E4e04F14f7A4a6702c74187c5F6222033cd",
+        "rewardTokens": ["0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590"],
+        "fee": 1,
+        "pools": [
+            {
+                "pid": 0,
+                "lpToken": "0x1205f31718499dBf1fCa446663B532Ef87481fe1",
+                "stargateAddress": "0x8731d54E9D02c286767d56ac03e8037C07e01e98",
+                "token": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+                "stargateLPStakingPoolID": 0,
+                "stargateRouterPoolID": 1
+            }
+        ]
+    }
+}

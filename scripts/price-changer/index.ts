@@ -21,7 +21,9 @@ class DefaultDict {
                     name in target
                         ? target[name]
                         : (target[name] =
-                              typeof defaultInit === "function" ? new defaultInit().valueOf() : defaultInit),
+                              typeof defaultInit === "function"
+                                  ? new defaultInit().valueOf()
+                                  : defaultInit),
             }
         );
     }
@@ -32,7 +34,12 @@ const DECIMALS = 18;
 const decimal = (x: BigNumberish) => BigNumber.from(10).pow(x);
 const extend = (n: BigNumber, from: number, to: number) => n.mul(decimal(to - from));
 
-function price(tlv: BigNumberish, tvlDecimals: number, synthAmt: BigNumberish, decimalsOut: number) {
+function price(
+    tlv: BigNumberish,
+    tvlDecimals: number,
+    synthAmt: BigNumberish,
+    decimalsOut: number
+) {
     console.log(`tvl=${tlv} synthAmt=${synthAmt}`);
     //  tlvDecimalAdjusted = tlvInOpTokenWEI * (10 ** (DECIMALS -opTokenDecimals))
     let tlvDecimalAdjusted = BigNumber.from(tlv).mul(decimal(DECIMALS - tvlDecimals));
@@ -100,7 +107,12 @@ class SynthMeta {
         if (this.synthGroup.circulation.eq(0) || this.synthGroup.tlv.eq(0)) {
             return ethers.constants.MaxUint256;
         }
-        return price(this.synthGroup.tlv, this.synthGroup.tlvDecimals, this.synthGroup.circulation, this.opDecimals);
+        return price(
+            this.synthGroup.tlv,
+            this.synthGroup.tlvDecimals,
+            this.synthGroup.circulation,
+            this.opDecimals
+        );
     }
 
     public async fmtChainInfo() {
@@ -176,7 +188,11 @@ async function main() {
                 // and accumulate it to get the total circulation
                 // of this synth across all chains.
                 // Also save the synth itself for future reference
-                const synthAddress = await factory.deprecated_synths(info.chainId, info.chef, info.pid);
+                const synthAddress = await factory.deprecated_synths(
+                    info.chainId,
+                    info.chef,
+                    info.pid
+                );
                 const synth = await ethers.getContractAt("Synth", synthAddress, wallet);
                 const totalSupply = await synth.totalSupply();
                 synthMeta[synthId].addSupply(totalSupply);

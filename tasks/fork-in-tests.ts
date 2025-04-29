@@ -96,7 +96,8 @@ HardhatContext.getHardhatContext().extendersManager.add((hre) => {
                 hre.config.paths,
                 hre.artifacts,
                 HardhatContext.getHardhatContext().experimentalHardhatNetworkMessageTraceHooks.map(
-                    (hook) => (trace: MessageTrace, isCallMessageTrace: boolean) => hook(hre, trace, isCallMessageTrace)
+                    (hook) => (trace: MessageTrace, isCallMessageTrace: boolean) =>
+                        hook(hre, trace, isCallMessageTrace)
                 )
             );
         });

@@ -7,7 +7,9 @@ import fs from "fs";
 export default async function deployTestnetChecker() {
     console.log("Deploy TestnetChecker");
 
-    const TestnetCheckerFactory = (await ethers.getContractFactory("TestnetChecker")) as TestnetChecker__factory;
+    const TestnetCheckerFactory = (await ethers.getContractFactory(
+        "TestnetChecker"
+    )) as TestnetChecker__factory;
 
     let checker = await TestnetCheckerFactory.deploy();
     await checker.deployed();

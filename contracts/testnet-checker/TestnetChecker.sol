@@ -4,6 +4,6 @@ pragma solidity ^0.8.15;
 
 contract TestnetChecker {
     function check() public view returns (string memory) {
-        return "This is testnet";
+        return "This is Entangle testnet";
     }
 }

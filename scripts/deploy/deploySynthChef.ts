@@ -19,7 +19,9 @@ export default async function deploySynthChef(wrapperAddress: string, feeCollect
     let owner = (await ethers.getSigners())[0];
 
     const chefs_config = JSON.parse(
-        fs.readFileSync(path.join(__dirname, "synth_chef_config", "synth_chef_config.json")).toString()
+        fs
+            .readFileSync(path.join(__dirname, "synth_chef_config", "synth_chef_config.json"))
+            .toString()
     );
 
     let chefAddress: string = "";
@@ -28,7 +30,9 @@ export default async function deploySynthChef(wrapperAddress: string, feeCollect
 
     switch (network) {
         case "tftm": {
-            const ChefFactory = (await ethers.getContractFactory("FantomSynthChef")) as FantomSynthChef__factory;
+            const ChefFactory = (await ethers.getContractFactory(
+                "FantomSynthChef"
+            )) as FantomSynthChef__factory;
             const chef = await ChefFactory.deploy(
                 chefs_config[network].masterChef,
                 wrapperAddress,
@@ -43,7 +47,13 @@ export default async function deploySynthChef(wrapperAddress: string, feeCollect
 
             for (let pool of chefs_config[network].pools) {
                 await (
-                    await chef.addPool(pool.lpToken, pool.gaugeAddress, pool.token0, pool.token1, pool.isStable)
+                    await chef.addPool(
+                        pool.lpToken,
+                        pool.gaugeAddress,
+                        pool.token0,
+                        pool.token1,
+                        pool.isStable
+                    )
                 ).wait();
                 pids.push(pool.pid);
             }
@@ -52,7 +62,9 @@ export default async function deploySynthChef(wrapperAddress: string, feeCollect
             break;
         }
         case "tavax": {
-            const ChefFactory = (await ethers.getContractFactory("AvaxSynthChef")) as AvaxSynthChef__factory;
+            const ChefFactory = (await ethers.getContractFactory(
+                "AvaxSynthChef"
+            )) as AvaxSynthChef__factory;
             const chef = await ChefFactory.deploy(
                 chefs_config[network].masterChef,
                 chefs_config[network].router,
@@ -75,7 +87,9 @@ export default async function deploySynthChef(wrapperAddress: string, feeCollect
             break;
         }
         case "tbsc": {
-            const ChefFactory = (await ethers.getContractFactory("BSCSynthChef")) as BSCSynthChef__factory;
+            const ChefFactory = (await ethers.getContractFactory(
+                "BSCSynthChef"
+            )) as BSCSynthChef__factory;
             const chef = await ChefFactory.deploy(
                 chefs_config[network].masterChef,
                 chefs_config[network].router,
@@ -98,7 +112,9 @@ export default async function deploySynthChef(wrapperAddress: string, feeCollect
             break;
         }
         case "teth": {
-            const ChefFactory = (await ethers.getContractFactory("ETHSynthChef")) as ETHSynthChef__factory;
+            const ChefFactory = (await ethers.getContractFactory(
+                "ETHSynthChef"
+            )) as ETHSynthChef__factory;
             const chef = await ChefFactory.deploy(
                 chefs_config[network].masterChef,
                 wrapperAddress,
@@ -129,7 +145,9 @@ export default async function deploySynthChef(wrapperAddress: string, feeCollect
             break;
         }
         case "top": {
-            const ChefFactory = (await ethers.getContractFactory("OptimismSynthChef")) as OptimismSynthChef__factory;
+            const ChefFactory = (await ethers.getContractFactory(
+                "OptimismSynthChef"
+            )) as OptimismSynthChef__factory;
             const chef = await ChefFactory.deploy(
                 chefs_config[network].router,
                 wrapperAddress,
@@ -144,7 +162,13 @@ export default async function deploySynthChef(wrapperAddress: string, feeCollect
 
             for (let pool of chefs_config[network].pools) {
                 await (
-                    await chef.addPool(pool.lpToken, pool.gaugeAddress, pool.token0, pool.token1, pool.isStable)
+                    await chef.addPool(
+                        pool.lpToken,
+                        pool.gaugeAddress,
+                        pool.token0,
+                        pool.token1,
+                        pool.isStable
+                    )
                 ).wait();
                 pids.push(pool.pid);
             }
@@ -153,7 +177,9 @@ export default async function deploySynthChef(wrapperAddress: string, feeCollect
             break;
         }
         case "tarb": {
-            const ChefFactory = (await ethers.getContractFactory("ArbitrumSynthChef")) as ArbitrumSynthChef__factory;
+            const ChefFactory = (await ethers.getContractFactory(
+                "ArbitrumSynthChef"
+            )) as ArbitrumSynthChef__factory;
             const chef = await ChefFactory.deploy(
                 chefs_config[network].router,
                 wrapperAddress,
@@ -183,7 +209,9 @@ export default async function deploySynthChef(wrapperAddress: string, feeCollect
             break;
         }
         case "tmat": {
-            const ChefFactory = (await ethers.getContractFactory("PolygonSynthChef")) as PolygonSynthChef__factory;
+            const ChefFactory = (await ethers.getContractFactory(
+                "PolygonSynthChef"
+            )) as PolygonSynthChef__factory;
             const chef = await ChefFactory.deploy(
                 chefs_config[network].router,
                 wrapperAddress,

@@ -11,7 +11,12 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract PancakeSwapSynthChef is Initializable, UUPSUpgradeable, AccessControlUpgradeable, OwnableUpgradeable {
+contract PancakeSwapSynthChef is
+    Initializable,
+    UUPSUpgradeable,
+    AccessControlUpgradeable,
+    OwnableUpgradeable
+{
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
     /// @notice Interface of PancakeSwap MasterChef
@@ -22,7 +27,7 @@ contract PancakeSwapSynthChef is Initializable, UUPSUpgradeable, AccessControlUp
     bytes32 public constant ADMIN = keccak256("ADMIN");
     bytes32 public constant MASTER = keccak256("MASTER");
 
-    /// @notice Mapping from internal pool Id to Pancake pool Id
+    /// @notice Mapping from entangle internal pool Id to Pancake pool Id
     mapping(uint32 poolId => uint256 protoPid) pools;
 
     function initialize(IMasterChef _chef, IRouter _router) public initializer {
@@ -34,7 +39,7 @@ contract PancakeSwapSynthChef is Initializable, UUPSUpgradeable, AccessControlUp
     function _authorizeUpgrade(address) internal override onlyOwner {}
 
     /// @notice Add a new pool. Can only be called by the ADMIN.
-    /// @param poolId internal poolId
+    /// @param poolId Entangle internal poolId
     /// @param poolInfo Information required to communicate with Pancake.
     function addPool(uint32 poolId, bytes calldata poolInfo) external {
         uint256 protoPid = abi.decode(poolInfo, (uint256));
@@ -42,7 +47,7 @@ contract PancakeSwapSynthChef is Initializable, UUPSUpgradeable, AccessControlUp
     }
 
     /// @notice Provide liquidity to pool and stake LP tokens. Can only be called by the MASTER.
-    /// @param poolId internal poolId
+    /// @param poolId Entangle internal poolId
     /// @param amounts Amounts of each token in pair. amounts[0] for token0, amounts[1] for token1.
     function deposit(uint32 poolId, uint256[] memory amounts) external {
         uint256 pid = pools[poolId];
@@ -75,10 +80,13 @@ contract PancakeSwapSynthChef is Initializable, UUPSUpgradeable, AccessControlUp
         chef.deposit(pid, amountLP);
     }
 
-    /// @notice Withdraw LP tokens from farm and remove liquidity. Transfer all to MasterChef. Can only be called by the MASTER.
-    /// @param poolId internal poolId
+    /// @notice Withdraw LP tokens from farm and remove liquidity. Transfer all to entangle MasterChef. Can only be called by the MASTER.
+    /// @param poolId Entangle internal poolId
     /// @param lpAmountToWithdraw Amount of LP tokens to witdraw
-    function withdraw(uint32 poolId, uint256 lpAmountToWithdraw) external returns (uint256[] memory amounts) {
+    function withdraw(
+        uint32 poolId,
+        uint256 lpAmountToWithdraw
+    ) external returns (uint256[] memory amounts) {
         uint256 pid = pools[poolId];
         address lpPair = chef.lpToken(pid);
         address token0 = IPair(lpPair).token0();
@@ -104,7 +112,7 @@ contract PancakeSwapSynthChef is Initializable, UUPSUpgradeable, AccessControlUp
     }
 
     /// @notice Deposit LP tokens to farm. Can only be called by the MASTER.
-    /// @param poolId internal poolId
+    /// @param poolId Entangle internal poolId
     /// @param lpAmount Amount of LP tokens to deposit
     function depositLP(uint32 poolId, uint256 lpAmount) external {
         uint256 pid = pools[poolId];
@@ -115,8 +123,8 @@ contract PancakeSwapSynthChef is Initializable, UUPSUpgradeable, AccessControlUp
         chef.deposit(pid, lpAmount);
     }
 
-    /// @notice Withdraw LP tokens from farm and transfer it to MasterChef. Can only be called by the MASTER.
-    /// @param poolId internal poolId
+    /// @notice Withdraw LP tokens from farm and transfer it to entangle MasterChef. Can only be called by the MASTER.
+    /// @param poolId Entangle internal poolId
     /// @param lpAmount Amount of LP tokens to withdraw
     function withdrawLP(uint32 poolId, uint256 lpAmount) external {
         uint256 pid = pools[poolId];
@@ -124,9 +132,11 @@ contract PancakeSwapSynthChef is Initializable, UUPSUpgradeable, AccessControlUp
         //!TODO Transfer to our MsterChef
     }
 
-    /// @notice Grab bounty from farm and transfer it to MasterChef. Can only be called by the MASTER.
-    /// @param poolId internal poolId
-    function harvest(uint32 poolId) external returns (address[] memory rewardTokens, uint256[] memory amounts) {
+    /// @notice Grab bounty from farm and transfer it to entangle MasterChef. Can only be called by the MASTER.
+    /// @param poolId Entangle internal poolId
+    function harvest(
+        uint32 poolId
+    ) external returns (address[] memory rewardTokens, uint256[] memory amounts) {
         uint256 pid = pools[poolId];
         rewardTokens = new address[](1);
         amounts = new uint256[](1);
@@ -138,7 +148,7 @@ contract PancakeSwapSynthChef is Initializable, UUPSUpgradeable, AccessControlUp
     }
 
     /// @notice View function to get balance of LP tokens.
-    /// @param poolId internal poolId
+    /// @param poolId Entangle internal poolId
     /// @return amount Balance of LP tokens of this contract
     function getTotalLpBalance(uint32 poolId) public view returns (uint256 amount) {
         uint256 pid = pools[poolId];
@@ -146,7 +156,7 @@ contract PancakeSwapSynthChef is Initializable, UUPSUpgradeable, AccessControlUp
     }
 
     /// @notice View function to get pool tokens addresses.
-    /// @param poolId internal poolId
+    /// @param poolId Entangle internal poolId
     /// @return tokens array of pool token addresses.
     function getPoolTokens(uint32 poolId) external view returns (address[] memory tokens) {
         uint256 pid = pools[poolId];
@@ -157,10 +167,13 @@ contract PancakeSwapSynthChef is Initializable, UUPSUpgradeable, AccessControlUp
     }
 
     /// @notice View function to calculate amounts of pool tokens if we swap it.
-    /// @param poolId internal poolId
+    /// @param poolId Entangle internal poolId
     /// @param lpAmount amount of LP
     /// @return amounts array of pool tokens amounts.
-    function lpTokensToPoolTokens(uint32 poolId, uint256 lpAmount) external view returns (uint256[] memory amounts) {
+    function lpTokensToPoolTokens(
+        uint32 poolId,
+        uint256 lpAmount
+    ) external view returns (uint256[] memory amounts) {
         uint256 pid = pools[poolId];
         address lpPair = chef.lpToken(pid);
         amounts = new uint256[](2);

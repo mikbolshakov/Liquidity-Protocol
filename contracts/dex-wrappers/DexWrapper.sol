@@ -8,9 +8,14 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "./interfaces/IProtocolDEXWrapper.sol";
+import "./interfaces/IEntangleProtocolDEXWrapper.sol";
 
-contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable, OwnableUpgradeable {
+contract DexWrapper is
+    Initializable,
+    UUPSUpgradeable,
+    AccessControlUpgradeable,
+    OwnableUpgradeable
+{
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
     bytes32 public constant ADMIN = keccak256("ADMIN");
@@ -38,7 +43,10 @@ contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable,
     /// @notice Add ProtoDexWrapper to mapping. Can only be called by the ADMIN.
     /// @param protoDexId Internal id of protocol.
     /// @param protoDexWrapper Address of protoDexWrapper.
-    function addProtoDexWrapper(uint256 protoDexId, address protoDexWrapper) external onlyRole(ADMIN) {
+    function addProtoDexWrapper(
+        uint256 protoDexId,
+        address protoDexWrapper
+    ) external onlyRole(ADMIN) {
         protoDexWrappers[protoDexId] = protoDexWrapper;
     }
 
@@ -88,15 +96,23 @@ contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable,
                 uint256 dexId = specifiedPaths[i].protoDexId;
                 address protoDexWrapper = protoDexWrappers[dexId];
 
-                if (IERC20Upgradeable(lastTokenReceived).allowance(address(this), address(protoDexWrapper)) < amount) {
+                if (
+                    IERC20Upgradeable(lastTokenReceived).allowance(
+                        address(this),
+                        address(protoDexWrapper)
+                    ) < amount
+                ) {
                     IERC20Upgradeable(lastTokenReceived).safeIncreaseAllowance(
                         address(protoDexWrapper),
                         type(uint256).max
                     );
                 }
 
-                IERC20Upgradeable(lastTokenReceived).safeTransfer(protoDexWrapper, lastReceivedAmount);
-                (lastReceivedAmount, lastTokenReceived) = IDEXWrapper(protoDexWrapper).swap(
+                IERC20Upgradeable(lastTokenReceived).safeTransfer(
+                    protoDexWrapper,
+                    lastReceivedAmount
+                );
+                (lastReceivedAmount, lastTokenReceived) = IEntangleDEXWrapper(protoDexWrapper).swap(
                     path,
                     lastReceivedAmount
                 );
@@ -113,13 +129,19 @@ contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable,
 
             bytes memory swapTokensPath = abi.encode(tokens);
 
-            if (IERC20Upgradeable(tokens[0]).allowance(address(this), address(protoDexWrapper)) < amount) {
-                IERC20Upgradeable(tokens[0]).safeIncreaseAllowance(address(protoDexWrapper), type(uint256).max);
+            if (
+                IERC20Upgradeable(tokens[0]).allowance(address(this), address(protoDexWrapper)) <
+                amount
+            ) {
+                IERC20Upgradeable(tokens[0]).safeIncreaseAllowance(
+                    address(protoDexWrapper),
+                    type(uint256).max
+                );
             }
 
             IERC20Upgradeable(tokenFrom).safeTransfer(protoDexWrapper, amount);
 
-            (receivedAmount, ) = IDEXWrapper(protoDexWrapper).swap(swapTokensPath, amount);
+            (receivedAmount, ) = IEntangleDEXWrapper(protoDexWrapper).swap(swapTokensPath, amount);
             uint256 tokenToAmountAfterSwap = IERC20Upgradeable(tokenTo).balanceOf(address(this)) -
                 tokenToBalanceBeforeSwap;
             IERC20Upgradeable(tokenTo).safeTransfer(_msgSender(), tokenToAmountAfterSwap);
@@ -152,7 +174,10 @@ contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable,
                 uint256 dexId = specifiedPaths[i].protoDexId;
                 address protoDexWrapper = protoDexWrappers[dexId];
 
-                lastAmountToReceive = IDEXWrapper(protoDexWrapper).previewSwap(path, lastAmountToReceive);
+                lastAmountToReceive = IEntangleDEXWrapper(protoDexWrapper).previewSwap(
+                    path,
+                    lastAmountToReceive
+                );
             }
             return amountToReceive = lastAmountToReceive;
         } else {
@@ -162,7 +187,10 @@ contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable,
             tokens[1] = tokenTo;
 
             bytes memory swapTokensPath = abi.encode(tokens);
-            amountToReceive = IDEXWrapper(protoDexWrapper).previewSwap(swapTokensPath, amount);
+            amountToReceive = IEntangleDEXWrapper(protoDexWrapper).previewSwap(
+                swapTokensPath,
+                amount
+            );
         }
     }
 
@@ -170,7 +198,10 @@ contract DexWrapper is Initializable, UUPSUpgradeable, AccessControlUpgradeable,
     /// @param tokenA Address of first token to encode.
     /// @param tokenB Address of second token to encode.
     /// @return swapPoolKey Encoded bytes of sequence of tokens.
-    function getSwapPoolKey(address tokenA, address tokenB) public pure returns (bytes32 swapPoolKey) {
+    function getSwapPoolKey(
+        address tokenA,
+        address tokenB
+    ) public pure returns (bytes32 swapPoolKey) {
         if (tokenA > tokenB) (tokenA, tokenB) = (tokenB, tokenA);
         swapPoolKey = keccak256(abi.encode(tokenA, tokenB));
     }

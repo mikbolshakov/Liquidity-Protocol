@@ -78,7 +78,11 @@ interface IBEP20 {
      *
      * Emits a {Transfer} event.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
 
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
@@ -448,12 +452,19 @@ contract BEP20Token is Context, IBEP20, Ownable {
      * - the caller must have allowance for `sender`'s tokens of at least
      * `amount`.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool) {
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool) {
         _transfer(sender, recipient, amount);
         _approve(
             sender,
             _msgSender(),
-            _allowances[sender][_msgSender()].sub(amount, "BEP20: transfer amount exceeds allowance")
+            _allowances[sender][_msgSender()].sub(
+                amount,
+                "BEP20: transfer amount exceeds allowance"
+            )
         );
         return true;
     }
@@ -493,7 +504,10 @@ contract BEP20Token is Context, IBEP20, Ownable {
         _approve(
             _msgSender(),
             spender,
-            _allowances[_msgSender()][spender].sub(subtractedValue, "BEP20: decreased allowance below zero")
+            _allowances[_msgSender()][spender].sub(
+                subtractedValue,
+                "BEP20: decreased allowance below zero"
+            )
         );
         return true;
     }
@@ -527,7 +541,11 @@ contract BEP20Token is Context, IBEP20, Ownable {
 
     function updateMasterMinter(address _newMasterMinter) external {}
 
-    function Swapin(bytes32 txhash, address account, uint256 amount) public onlyOwner returns (bool) {}
+    function Swapin(
+        bytes32 txhash,
+        address account,
+        uint256 amount
+    ) public onlyOwner returns (bool) {}
 
     address public l2Bridge;
     address public gatewayAddress;

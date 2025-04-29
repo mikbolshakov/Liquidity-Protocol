@@ -91,7 +91,10 @@ describe("TraderJoe test", () => {
 
     it("LP tokens to pool tokens", async () => {
         let lpAmountAfterDeposit = await Chef.getTotalLpBalance(INTERNAL_POOL_ID);
-        let poolTokenAmounts = await Chef.lpTokensToPoolTokens(INTERNAL_POOL_ID, lpAmountAfterDeposit);
+        let poolTokenAmounts = await Chef.lpTokensToPoolTokens(
+            INTERNAL_POOL_ID,
+            lpAmountAfterDeposit
+        );
         console.log("lpTokensToPoolTokens: %s, %s", poolTokenAmounts[0]);
     });
 

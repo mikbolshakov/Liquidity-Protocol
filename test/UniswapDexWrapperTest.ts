@@ -59,9 +59,13 @@ describe("UniswapDexWrapper test", () => {
 
     it("Deploy UniswapDexWrapper", async () => {
         const UniWrapperContract = await ethers.getContractFactory("UniswapDexWrapper");
-        const uniWrapper = await upgrades.deployProxy(UniWrapperContract, [UNISWAPV2_ROUTER02, WETH_ADDRESS], {
-            kind: "uups",
-        });
+        const uniWrapper = await upgrades.deployProxy(
+            UniWrapperContract,
+            [UNISWAPV2_ROUTER02, WETH_ADDRESS],
+            {
+                kind: "uups",
+            }
+        );
         expect(uniWrapper.address).to.not.eq(ethers.constants.AddressZero);
         UniWrapper = uniWrapper as UniswapDexWrapper;
 
@@ -75,9 +79,16 @@ describe("UniswapDexWrapper test", () => {
 
     it("SwapTokens function", async () => {
         const USDAmt = 100000;
-        USDC.connect(signers[0]).increaseAllowance(DexWrap.address, BigNumber.from(10).pow(6).mul(USDAmt));
+        USDC.connect(signers[0]).increaseAllowance(
+            DexWrap.address,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
 
-        await DexWrap.connect(swapper).swapTokens(USDC_ADDRESS, DAI_ADDRESS, BigNumber.from(10).pow(6).mul(USDAmt));
+        await DexWrap.connect(swapper).swapTokens(
+            USDC_ADDRESS,
+            DAI_ADDRESS,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
         expect(await DAI.balanceOf(signers[0].address)).to.be.gt(0);
     });
 
@@ -93,8 +104,15 @@ describe("UniswapDexWrapper test", () => {
 
     it("SwapTokens through wNative (WETH)", async () => {
         const USDAmt = 10;
-        USDC.connect(signers[0]).increaseAllowance(DexWrap.address, BigNumber.from(10).pow(6).mul(USDAmt));
-        await DexWrap.connect(swapper).swapTokens(USDC_ADDRESS, UNI_ADDRESS, BigNumber.from(10).pow(6).mul(USDAmt));
+        USDC.connect(signers[0]).increaseAllowance(
+            DexWrap.address,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
+        await DexWrap.connect(swapper).swapTokens(
+            USDC_ADDRESS,
+            UNI_ADDRESS,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
 
         expect(await UNI.balanceOf(signers[0].address)).to.be.gt(0);
     });
@@ -124,14 +142,25 @@ describe("UniswapDexWrapper test", () => {
         };
 
         const swapPathArray = [SpecifiedSwapPath1, SpecifiedSwapPath2, SpecifiedSwapPath3];
-        await DexWrap.connect(admin).addSpecifiedSwapPath(USDC_ADDRESS, USDT_ADDRESS, swapPathArray);
+        await DexWrap.connect(admin).addSpecifiedSwapPath(
+            USDC_ADDRESS,
+            USDT_ADDRESS,
+            swapPathArray
+        );
     });
 
     it("SwapTokens by SpecifiedSwapPath", async () => {
         const USDAmt = 100000;
-        USDC.connect(signers[0]).increaseAllowance(DexWrap.address, BigNumber.from(10).pow(6).mul(USDAmt));
+        USDC.connect(signers[0]).increaseAllowance(
+            DexWrap.address,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
 
-        await DexWrap.connect(swapper).swapTokens(USDC_ADDRESS, USDT_ADDRESS, BigNumber.from(10).pow(6).mul(USDAmt));
+        await DexWrap.connect(swapper).swapTokens(
+            USDC_ADDRESS,
+            USDT_ADDRESS,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
         expect(await USDT.balanceOf(signers[0].address)).to.be.gt(0);
     });
 

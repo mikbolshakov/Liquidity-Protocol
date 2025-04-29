@@ -129,9 +129,11 @@ export default async function deployContracts(BRIDGE_ADDR: string, isTestnet: bo
     ];
 
     //FIXME: Dafuk???
-    promises.slice(1).reduce((acc: Promise<ContractTransaction>, cv: () => Promise<ContractTransaction>) => {
-        return acc.then((e) => e.wait().then(cv));
-    }, promises[0]());
+    promises
+        .slice(1)
+        .reduce((acc: Promise<ContractTransaction>, cv: () => Promise<ContractTransaction>) => {
+            return acc.then((e) => e.wait().then(cv));
+        }, promises[0]());
 
     console.log("Wrapper:", wrapperAddress);
     console.log("Synth chef:", chef.address);

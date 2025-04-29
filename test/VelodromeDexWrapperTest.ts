@@ -74,9 +74,16 @@ describe("VelodromeDexWrapper test", () => {
 
     it("SwapTokens function", async () => {
         const USDAmt = 10;
-        USDC.connect(signers[0]).increaseAllowance(DexWrap.address, BigNumber.from(10).pow(6).mul(USDAmt));
+        USDC.connect(signers[0]).increaseAllowance(
+            DexWrap.address,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
 
-        await DexWrap.connect(swapper).swapTokens(USDC_ADDRESS, DAI_ADDRESS, BigNumber.from(10).pow(6).mul(USDAmt));
+        await DexWrap.connect(swapper).swapTokens(
+            USDC_ADDRESS,
+            DAI_ADDRESS,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
         expect(await DAI.balanceOf(signers[0].address)).to.be.gt(0);
     });
 
@@ -92,8 +99,15 @@ describe("VelodromeDexWrapper test", () => {
 
     it("SwapTokens through wNative (WETH)", async () => {
         const USDAmt = 100;
-        USDC.connect(signers[0]).increaseAllowance(DexWrap.address, BigNumber.from(10).pow(6).mul(USDAmt));
-        await DexWrap.connect(swapper).swapTokens(USDC_ADDRESS, VELO_ADDRESS, BigNumber.from(10).pow(6).mul(USDAmt));
+        USDC.connect(signers[0]).increaseAllowance(
+            DexWrap.address,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
+        await DexWrap.connect(swapper).swapTokens(
+            USDC_ADDRESS,
+            VELO_ADDRESS,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
 
         expect(await VELO.balanceOf(signers[0].address)).to.be.gt(0);
     });
@@ -123,14 +137,25 @@ describe("VelodromeDexWrapper test", () => {
         };
 
         const swapPathArray = [SpecifiedSwapPath1, SpecifiedSwapPath2, SpecifiedSwapPath3];
-        await DexWrap.connect(admin).addSpecifiedSwapPath(USDC_ADDRESS, USDT_ADDRESS, swapPathArray);
+        await DexWrap.connect(admin).addSpecifiedSwapPath(
+            USDC_ADDRESS,
+            USDT_ADDRESS,
+            swapPathArray
+        );
     });
 
     it("SwapTokens by SpecifiedSwapPath", async () => {
         const USDAmt = 10;
-        USDC.connect(signers[0]).increaseAllowance(DexWrap.address, BigNumber.from(10).pow(6).mul(USDAmt));
+        USDC.connect(signers[0]).increaseAllowance(
+            DexWrap.address,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
 
-        await DexWrap.connect(swapper).swapTokens(USDC_ADDRESS, USDT_ADDRESS, BigNumber.from(10).pow(6).mul(USDAmt));
+        await DexWrap.connect(swapper).swapTokens(
+            USDC_ADDRESS,
+            USDT_ADDRESS,
+            BigNumber.from(10).pow(6).mul(USDAmt)
+        );
         expect(await USDT.balanceOf(signers[0].address)).to.be.gt(0);
     });
 

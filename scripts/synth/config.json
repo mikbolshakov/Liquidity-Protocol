@@ -1,0 +1,40 @@
+{
+    "priceChangerAddress": "0xd4e7d68d0e9ede259fc89b76c4a8bb6d5d1e66af",
+    "networks": {
+        "teth": {
+            "chainId": "1",
+            "pid": "0",
+            "provider": "https://nodes.test.entangle.fi/rpc/eth"
+        },
+        "tavax": {
+            "chainId": "43114",
+            "pid": "8",
+            "provider": "https://nodes.test.entangle.fi/rpc/avalanche"
+        },
+        "tftm": {
+            "chainId": "250",
+            "pid": "0",
+            "provider": "https://nodes.test.entangle.fi/rpc/fantom"
+        },
+        "tbsc": {
+            "chainId": "56",
+            "pid": "7",
+            "provider": "https://nodes.test.entangle.fi/rpc/bsc"
+        },
+        "tarb": {
+            "chainId": "42161",
+            "pid": "0",
+            "provider": "https://nodes.test.entangle.fi/rpc/arbitrum"
+        },
+        "top": {
+            "chainId": "10",
+            "pid": "0",
+            "provider": "https://nodes.test.entangle.fi/rpc/optimism"
+        },
+        "tmat": {
+            "chainId": "137",
+            "pid": "0",
+            "provider": "https://nodes.test.entangle.fi/rpc/polygon"
+        }
+    }
+}

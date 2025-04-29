@@ -23,7 +23,7 @@ contract SpiritSwapSynthChef is
     /// @notice Interface of SpiritSwap Router
     IQuoteLiquiditySpiritVeloRouter public router;
 
-    /// @notice MasterChef address
+    /// @notice Entangle MasterChef address
     // MasterSynthChef public masterChef;
 
     bytes32 public constant ADMIN = keccak256("ADMIN");
@@ -37,7 +37,7 @@ contract SpiritSwapSynthChef is
         bool stable;
     }
 
-    /// @notice Mapping from internal pool Id to SpiritSwap pool
+    /// @notice Mapping from entangle internal pool Id to SpiritSwap pool
     mapping(uint32 => Pool) pools;
 
     function initialize(IQuoteLiquiditySpiritVeloRouter _router) public initializer {
@@ -48,24 +48,34 @@ contract SpiritSwapSynthChef is
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
     /// @notice Add a new pool. Can only be called by the ADMIN.
-    /// @param poolId internal poolId.
+    /// @param poolId Entangle internal poolId.
     /// @param poolInfo Information required to communicate with SpiritSwap.
     function addPool(uint32 poolId, bytes calldata poolInfo) external onlyRole(ADMIN) {
         pools[poolId] = abi.decode(poolInfo, (Pool));
     }
 
     /// @notice Provide liquidity to pool and stake LP tokens. Can only be called by the MASTER.
-    /// @param poolId internal poolId.
+    /// @param poolId Entangle internal poolId.
     /// @param amounts Amounts of each token in pair. amounts[0] for tokens[0], amounts[1] for tokens[1].
     function deposit(uint32 poolId, uint256[] memory amounts) external onlyRole(MASTER) {
         Pool memory pool = pools[poolId];
 
-        if (IERC20Upgradeable(pool.tokens[0]).allowance(address(this), address(router)) < amounts[0]) {
-            IERC20Upgradeable(pool.tokens[0]).safeIncreaseAllowance(address(router), type(uint256).max);
+        if (
+            IERC20Upgradeable(pool.tokens[0]).allowance(address(this), address(router)) < amounts[0]
+        ) {
+            IERC20Upgradeable(pool.tokens[0]).safeIncreaseAllowance(
+                address(router),
+                type(uint256).max
+            );
         }
 
-        if (IERC20Upgradeable(pool.tokens[1]).allowance(address(this), address(router)) < amounts[1]) {
-            IERC20Upgradeable(pool.tokens[1]).safeIncreaseAllowance(address(router), type(uint256).max);
+        if (
+            IERC20Upgradeable(pool.tokens[1]).allowance(address(this), address(router)) < amounts[1]
+        ) {
+            IERC20Upgradeable(pool.tokens[1]).safeIncreaseAllowance(
+                address(router),
+                type(uint256).max
+            );
         }
 
         (, , uint amountLPs) = router.addLiquidity(
@@ -86,8 +96,8 @@ contract SpiritSwapSynthChef is
         pool.gauge.deposit(amountLPs);
     }
 
-    /// @notice Withdraw LP tokens from farm and remove liquidity. Transfer all to MasterChef. Can only be called by the MASTER.
-    /// @param poolId internal poolId.
+    /// @notice Withdraw LP tokens from farm and remove liquidity. Transfer all to entangle MasterChef. Can only be called by the MASTER.
+    /// @param poolId Entangle internal poolId.
     /// @param lpAmountToWithdraw Amount of LP tokens to witdraw.
     function withdraw(
         uint32 poolId,
@@ -121,18 +131,23 @@ contract SpiritSwapSynthChef is
     }
 
     /// @notice Deposit LP tokens to farm. Can only be called by the MASTER.
-    /// @param poolId internal poolId.
+    /// @param poolId Entangle internal poolId.
     /// @param lpAmount Amount of LP tokens to deposit.
     function depositLP(uint32 poolId, uint256 lpAmount) external onlyRole(MASTER) {
         Pool memory pool = pools[poolId];
-        if (IERC20Upgradeable(pool.LPToken).allowance(address(this), address(pool.gauge)) < lpAmount) {
-            IERC20Upgradeable(pool.LPToken).safeIncreaseAllowance(address(pool.gauge), type(uint256).max);
+        if (
+            IERC20Upgradeable(pool.LPToken).allowance(address(this), address(pool.gauge)) < lpAmount
+        ) {
+            IERC20Upgradeable(pool.LPToken).safeIncreaseAllowance(
+                address(pool.gauge),
+                type(uint256).max
+            );
         }
         pool.gauge.deposit(lpAmount);
     }
 
-    /// @notice Withdraw LP tokens from farm and transfer it to MasterChef. Can only be called by the MASTER.
-    /// @param poolId internal poolId.
+    /// @notice Withdraw LP tokens from farm and transfer it to entangle MasterChef. Can only be called by the MASTER.
+    /// @param poolId Entangle internal poolId.
     /// @param lpAmount Amount of LP tokens to withdraw.
     function withdrawLP(uint32 poolId, uint256 lpAmount) external onlyRole(MASTER) {
         Pool memory pool = pools[poolId];
@@ -142,8 +157,8 @@ contract SpiritSwapSynthChef is
         // IERC20Upgradeable(pool.LPToken).safeTransfer(masterChef, lpAmount);
     }
 
-    /// @notice Grab bounty from farm and transfer it to MasterChef. Can only be called by the MASTER.
-    /// @param poolId internal poolId.
+    /// @notice Grab bounty from farm and transfer it to entangle MasterChef. Can only be called by the MASTER.
+    /// @param poolId Entangle internal poolId.
     function harvest(
         uint32 poolId
     ) external onlyRole(MASTER) returns (address[] memory rewardTokens, uint256[] memory amounts) {
@@ -160,7 +175,7 @@ contract SpiritSwapSynthChef is
     }
 
     /// @notice View function to get balance of LP tokens on farm.
-    /// @param poolId internal poolId.
+    /// @param poolId Entangle internal poolId.
     /// @return amount Balance of LP tokens of this contract.
     function getTotalLpBalance(uint32 poolId) public view returns (uint256 amount) {
         Pool memory pool = pools[poolId];
@@ -168,7 +183,7 @@ contract SpiritSwapSynthChef is
     }
 
     /// @notice View function to get pool tokens addresses.
-    /// @param poolId internal poolId
+    /// @param poolId Entangle internal poolId
     /// @return tokens Array of pool token addresses.
     function getPoolTokens(uint32 poolId) external view returns (address[] memory tokens) {
         Pool memory pool = pools[poolId];
@@ -179,10 +194,13 @@ contract SpiritSwapSynthChef is
     }
 
     /// @notice View function to calculate amounts of pool tokens if we swap it.
-    /// @param poolId internal poolId.
+    /// @param poolId Entangle internal poolId.
     /// @param lpAmount Amount of LP.
     /// @return amounts Array of pool tokens amounts.
-    function lpTokensToPoolTokens(uint32 poolId, uint256 lpAmount) external view returns (uint256[] memory amounts) {
+    function lpTokensToPoolTokens(
+        uint32 poolId,
+        uint256 lpAmount
+    ) external view returns (uint256[] memory amounts) {
         Pool memory pool = pools[poolId];
         amounts = new uint256[](2);
 

@@ -6,7 +6,9 @@ import fs from "fs";
 
 export default async function deployFaucet() {
     console.log("Deploy Faucet");
-    const config = JSON.parse(fs.readFileSync(path.join(__dirname, "faucet_config", "faucet_config.json")).toString());
+    const config = JSON.parse(
+        fs.readFileSync(path.join(__dirname, "faucet_config", "faucet_config.json")).toString()
+    );
 
     const FaucetFactory = (await ethers.getContractFactory("Faucet")) as Faucet__factory;
 

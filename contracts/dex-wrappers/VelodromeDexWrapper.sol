@@ -7,11 +7,11 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "./interfaces/IProtocolDEXWrapper.sol";
+import "./interfaces/IEntangleProtocolDEXWrapper.sol";
 import "./interfaces/ISwapVelodromeRouter.sol";
 
 contract VelodromeDexWapper is
-    IDEXWrapper,
+    IEntangleDEXWrapper,
     Initializable,
     UUPSUpgradeable,
     AccessControlUpgradeable,
@@ -45,7 +45,11 @@ contract VelodromeDexWapper is
     function swap(
         bytes calldata swapPath,
         uint256 amount
-    ) external onlyRole(MASTER_WRAPPER) returns (uint256 receivedAmount, address lastTokenReceived) {
+    )
+        external
+        onlyRole(MASTER_WRAPPER)
+        returns (uint256 receivedAmount, address lastTokenReceived)
+    {
         address[] memory path = abi.decode(swapPath, (address[]));
         ISwapVelodromeRouter.route[] memory routes = _getSwapRoutes(path[0], path[1]);
 
@@ -53,7 +57,13 @@ contract VelodromeDexWapper is
             IERC20Upgradeable(path[0]).safeIncreaseAllowance(address(router), type(uint256).max);
         }
 
-        uint256[] memory amounts = router.swapExactTokensForTokens(amount, 0, routes, _msgSender(), block.timestamp);
+        uint256[] memory amounts = router.swapExactTokensForTokens(
+            amount,
+            0,
+            routes,
+            _msgSender(),
+            block.timestamp
+        );
         receivedAmount = amounts[amounts.length - 1];
         lastTokenReceived = routes[routes.length - 1].to;
     }
@@ -62,7 +72,10 @@ contract VelodromeDexWapper is
     /// @param swapPath Path to swap tokens.
     /// @param amount Amount of tokens to be swapped.
     /// @return amountToReceive Amount of received tokens if make a swap.
-    function previewSwap(bytes calldata swapPath, uint256 amount) external view returns (uint256 amountToReceive) {
+    function previewSwap(
+        bytes calldata swapPath,
+        uint256 amount
+    ) external view returns (uint256 amountToReceive) {
         address[] memory path = abi.decode(swapPath, (address[]));
         ISwapVelodromeRouter.route[] memory routes = _getSwapRoutes(path[0], path[1]);
 
@@ -81,7 +94,11 @@ contract VelodromeDexWapper is
         (address pair, bool stable) = _getBetterPair(_tokenFrom, _tokenTo);
         if (pair != address(0)) {
             routes = new ISwapVelodromeRouter.route[](1);
-            routes[0] = ISwapVelodromeRouter.route({from: _tokenFrom, to: _tokenTo, stable: stable});
+            routes[0] = ISwapVelodromeRouter.route({
+                from: _tokenFrom,
+                to: _tokenTo,
+                stable: stable
+            });
         } else {
             routes = new ISwapVelodromeRouter.route[](2);
             routes[0] = ISwapVelodromeRouter.route({from: _tokenFrom, to: wNative, stable: false});
@@ -94,7 +111,10 @@ contract VelodromeDexWapper is
     /// @param _tokenTo Address of token to which will be swap.
     /// @return pair Address of pair of tokens through which will be swap.
     /// @return stable Bool can be token transferred to the smart contract that manages the token.
-    function _getBetterPair(address _tokenFrom, address _tokenTo) internal view returns (address pair, bool stable) {
+    function _getBetterPair(
+        address _tokenFrom,
+        address _tokenTo
+    ) internal view returns (address pair, bool stable) {
         address stableLpPair = factory.getPair(_tokenFrom, _tokenTo, true);
         address notStableLpPair = factory.getPair(_tokenFrom, _tokenTo, false);
         if (stableLpPair == address(0)) return (notStableLpPair, false);
